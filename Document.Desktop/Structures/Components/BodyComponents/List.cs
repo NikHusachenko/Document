@@ -72,7 +72,15 @@ namespace Document.Desktop.Structures.Components.BodyComponents
 
         public override void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(new string('*', Console.WindowWidth));
+
+            Console.WriteLine(nameof(List));
+            foreach (TextContent item in _list)
+            {
+                item.Display();
+            }
+
+            Console.WriteLine(new string('*', Console.WindowWidth));
         }
 
         public override List Clone(DocumentSystemContext systemContext)

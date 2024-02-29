@@ -10,14 +10,15 @@ namespace Document.Desktop.Management
         private readonly DocumentSystemContext _systemContext;
 
         private string DefaultAuthorName => Environment.MachineName;
-
-        public DateTimeOffset CreatedAt { get; set; }
-        public DateTimeOffset LastModifiedAt { get; set; }
-        public string Author { get; set; }
         
-        public string SavedAt { get; set; }
-        public string DocumentName { get; set; }
-        public string Extension { get; set; } = DEFAULT_EXTENSION;
+        public Guid UniqueMetaUuid { get; private init; }
+        public DateTimeOffset CreatedAt { get; private init; }
+        public DateTimeOffset LastModifiedAt { get; private init; }
+        public string Author { get; private init; }
+        
+        public string SavedAt { get; private init; }
+        public string DocumentName { get; private init; }
+        public string Extension { get; private init; } = DEFAULT_EXTENSION;
 
         public Metadata(DocumentSystemContext systemContext) 
             : this(systemContext, string.Empty, DEFAULT_DOCUMENT_NAME) { Author = DefaultAuthorName; }
@@ -29,6 +30,7 @@ namespace Document.Desktop.Management
         {
             _systemContext = systemContext;
             
+            UniqueMetaUuid = Guid.NewGuid();
             CreatedAt = DateTimeOffset.Now;
             LastModifiedAt = DateTimeOffset.Now;
             Author = author;

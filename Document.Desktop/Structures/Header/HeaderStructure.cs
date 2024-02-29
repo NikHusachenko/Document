@@ -52,9 +52,14 @@ namespace Document.Desktop.Structures.Header
 
         public void Display()
         {
+            Console.WriteLine($"\n{nameof(HeaderStructure)}");
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
             CoverPage.Display();
             TitlePage.Display();
             ContentTable.Display();
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

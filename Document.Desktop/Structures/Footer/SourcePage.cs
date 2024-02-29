@@ -66,7 +66,15 @@ namespace Document.Desktop.Structures.Footer
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(new string('-', Console.WindowWidth));
+            Console.WriteLine(nameof(SourcePage));
+
+            foreach (var item in _sources)
+            {
+                item.Display();
+            }
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
 
         public SourcePage Clone(DocumentSystemContext systemContext)
@@ -119,7 +127,8 @@ namespace Document.Desktop.Structures.Footer
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Content.Display();
+            Console.WriteLine(SourceUrl);
         }
     }
 }

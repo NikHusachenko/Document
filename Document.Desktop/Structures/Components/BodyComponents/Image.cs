@@ -45,7 +45,13 @@ namespace Document.Desktop.Structures.Components.BodyComponents
 
         public override void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(new string('*', Console.WindowWidth));
+
+            Console.WriteLine(nameof(Image));
+            Console.WriteLine(PathToImage);
+            Label.Display();
+
+            Console.WriteLine(new string('*', Console.WindowWidth));
         }
     }
 }

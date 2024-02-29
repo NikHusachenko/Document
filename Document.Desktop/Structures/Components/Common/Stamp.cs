@@ -3,7 +3,7 @@ using Document.Desktop.Management;
 
 namespace Document.Desktop.Structures.Components.Common
 {
-    public sealed class Stamp : ICloneable<Stamp>, IValidable
+    public sealed class Stamp : ICloneable<Stamp>, IValidable, IDisplayable
     {
         private readonly DocumentSystemContext _systemContext;
 
@@ -40,5 +40,17 @@ namespace Document.Desktop.Structures.Components.Common
             Width = Width,
             PathToImage = PathToImage
         };
+
+        public void Display()
+        {
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            Console.WriteLine(nameof(Stamp));
+            Console.WriteLine(PathToImage);
+            Console.WriteLine(Height);
+            Console.WriteLine(Width);
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
+        }
     }
 }

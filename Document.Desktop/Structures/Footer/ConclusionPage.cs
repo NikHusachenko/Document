@@ -44,7 +44,13 @@ namespace Document.Desktop.Structures.Footer
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(new string('-', Console.WindowWidth));
+            Console.WriteLine(nameof(ConclusionPage));
+
+            Console.WriteLine(ConclusionUnitName);
+            Content.Display();
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

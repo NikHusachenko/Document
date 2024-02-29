@@ -17,7 +17,7 @@
     {
         public bool IsError { get; set; }
         public string ErrorMessage { get; set; } = string.Empty;
-        public T Value { get; set; }
+        public T Value { get; set; } = default(T)!;
 
         public static ResponseService<T> Ok(T value) => new ResponseService<T>() { Value = value };
         public static ResponseService<T> Error(string errorMessage) => new ResponseService<T>()

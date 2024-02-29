@@ -16,8 +16,8 @@ namespace Document.Desktop.Management.FileManagement.Import
 
             try
             {
-                Document result = JsonConvert.DeserializeObject<Document>(documentJson);
-                return ResponseService<Document>.Ok(result);
+                Document? result = JsonConvert.DeserializeObject<Document>(documentJson);
+                return ResponseService<Document>.Ok(result!);
             }
             catch (Exception ex)
             {

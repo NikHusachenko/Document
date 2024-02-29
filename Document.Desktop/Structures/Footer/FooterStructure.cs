@@ -1,5 +1,6 @@
 ﻿using Document.Desktop.Contracts;
 using Document.Desktop.Management;
+using Document.Desktop.Structures.Header;
 
 namespace Document.Desktop.Structures.Footer
 {
@@ -58,7 +59,13 @@ namespace Document.Desktop.Structures.Footer
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"\n{nameof(FooterStructure)}");
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            ConclusionPage.Display();
+            SourcePage.Display();
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

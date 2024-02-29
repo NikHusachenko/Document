@@ -46,7 +46,13 @@ namespace Document.Desktop.Structures.Header
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(nameof(TitlePage));
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            HeaderLabel.Display();
+            Title.Display();
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

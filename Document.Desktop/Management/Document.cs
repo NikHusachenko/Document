@@ -10,6 +10,8 @@ namespace Document.Desktop.Management
 {
     public class Document : IValidable, IDisplayable
     {
+        private const string DEFAULT_DOCUMENT_TITLE = "Document";
+
         private readonly DocumentSystemContext _context;
 
         public Metadata Metadata { get; private init; }
@@ -27,10 +29,7 @@ namespace Document.Desktop.Management
             }
         }
 
-        private Document()
-        {
-            _context = new DocumentSystemContext(this);
-        }
+        private Document() : this(DEFAULT_DOCUMENT_TITLE) { }
 
         public Document(string title)
         {
@@ -44,7 +43,23 @@ namespace Document.Desktop.Management
 
         public void Display()
         {
-            throw new NotImplementedException();
+            DisplayMetadata();
+            
+            Header.Display();
+            Body.Display();
+            Footer.Display();
+        }
+
+        public void DisplayMetadata()
+        {
+            Console.WriteLine(new string('=', Console.WindowWidth));
+            Console.WriteLine(Metadata.UniqueMetaUuid);
+            Console.WriteLine(Metadata.Author);
+            Console.WriteLine(Metadata.CreatedAt.ToString("dd.MM.yyyy HH:mm"));
+            Console.WriteLine(Metadata.SavedAt);
+            Console.WriteLine(Metadata.DocumentName);
+            Console.WriteLine(Metadata.Extension);
+            Console.WriteLine(new string('=', Console.WindowWidth));
         }
 
         public Document Clone() => new Document()

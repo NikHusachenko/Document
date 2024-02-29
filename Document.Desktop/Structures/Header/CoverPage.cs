@@ -51,7 +51,14 @@ namespace Document.Desktop.Structures.Header
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(nameof(CoverPage));
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            Title.Display();
+            Subtitle.Display();
+            Author.Display();
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

@@ -10,12 +10,15 @@ namespace Document.Desktop.Structures.Body
 
         private Component[] _components;
 
-        public Page(DocumentSystemContext systemContext) : this(systemContext, []) { }
+        public readonly int Index;
 
-        private Page(DocumentSystemContext systemContext, Component[] components)
+        public Page(DocumentSystemContext systemContext, int index) : this(systemContext, [], index) { }
+
+        private Page(DocumentSystemContext systemContext, Component[] components, int index)
         {
             _systemContext = systemContext;
             _components = components;
+            Index = index;
         }
 
         public bool IsValid
@@ -69,12 +72,20 @@ namespace Document.Desktop.Structures.Body
                 components[i] = _components[i].Clone(systemContext);
             }
 
-            return new Page(systemContext, components);
+            return new Page(systemContext, components, Index);
         }
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine();
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            foreach (Component component in _components)
+            {
+                component.Display();
+            }
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

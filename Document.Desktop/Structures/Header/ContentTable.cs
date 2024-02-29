@@ -71,7 +71,15 @@ namespace Document.Desktop.Structures.Header
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(nameof(ContentTable));
+            Console.WriteLine(new string('-', Console.WindowWidth));
+            
+            foreach (ContentTableItem item in _table)
+            {
+                item.Display();
+            }
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 
@@ -80,7 +88,7 @@ namespace Document.Desktop.Structures.Header
         private readonly DocumentSystemContext _systemContext;
 
         public string Content { get; set; } = string.Empty;
-        public int Index { get; }
+        public int Index { get; set; }
 
         public bool IsValid
         {
@@ -109,7 +117,7 @@ namespace Document.Desktop.Structures.Header
 
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"[{Index}] {Content}");
         }
 
         public ContentTableItem Clone(DocumentSystemContext systemContext) => new ContentTableItem(systemContext, Content, Index);

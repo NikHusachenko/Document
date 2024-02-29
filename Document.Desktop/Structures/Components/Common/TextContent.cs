@@ -38,7 +38,22 @@ namespace Document.Desktop.Structures.Components.Common
             IsItalic = IsItalic,
         };
 
-        public void Display() => Console.WriteLine(Content.DisplayItalic().DisplayBold());
+        public void Display()
+        {
+            string output = Content;
+            
+            if (IsBold)
+            {
+                output.DisplayItalic();
+            }
+
+            if (IsItalic)
+            {
+                output.DisplayBold();
+            }
+
+            Console.WriteLine(output);
+        }
     }
 
     public enum TextMargin

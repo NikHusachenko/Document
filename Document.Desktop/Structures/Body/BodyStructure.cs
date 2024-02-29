@@ -44,7 +44,7 @@ namespace Document.Desktop.Structures.Body
         public Page AppendPageToEnd()
         {
             Array.Resize(ref _pages, _pages.Length + 1);
-            _pages[_pages.Length - 1] = new Page(_systemContext);
+            _pages[_pages.Length - 1] = new Page(_systemContext, _pages.Length  - 1);
             return _pages[_pages.Length - 1];
         }
 
@@ -68,10 +68,18 @@ namespace Document.Desktop.Structures.Body
 
             return new BodyStructure(systemContext, pages);
         }
-
+        
         public void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"\n{nameof(BodyStructure)}");
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            foreach (Page page in _pages)
+            {
+                page.Display();
+            }
+
+            Console.WriteLine(new string('-', Console.WindowWidth));
         }
     }
 }

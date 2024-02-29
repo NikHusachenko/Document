@@ -68,7 +68,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             {
                 columns = _table[_table.Length - 1].Length;
             }
-            catch (IndexOutOfRangeException ex) { }
+            catch (IndexOutOfRangeException) { }
 
             _table[_table.Length - 1] = new TextContent[columns];
             return _table.Length;
@@ -143,7 +143,19 @@ namespace Document.Desktop.Structures.Components.BodyComponents
 
         public override void Display()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(new string('*', Console.WindowWidth));
+
+            Console.WriteLine(nameof(Table));
+            for (int i = 0; i <  _table.Length; i++)
+            {
+                for (int j = 0; j < _table[i].Length; j++)
+                {
+                    Console.Write($"[{i}][{j}]: ");
+                    _table[i][j].Display();
+                }
+            }
+
+            Console.WriteLine(new string('*', Console.WindowWidth));
         }
     }
 }
