@@ -1,10 +1,14 @@
-﻿namespace Document.Desktop.Structures.Components.BodyComponents
+﻿using Document.Desktop.Structures.Components.Common;
+
+namespace Document.Desktop.Structures.Components.BodyComponents
 {
     public sealed class Image : Component
     {
         public string PathToImage { get; }
         public TextContent Label { get; set; }
-        
+
+        public Image() { }
+
         public Image(string path)
         {
             PathToImage = path;

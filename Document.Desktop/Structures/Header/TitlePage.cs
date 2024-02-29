@@ -1,5 +1,5 @@
 ﻿using Document.Desktop.Contracts;
-using Document.Desktop.Structures.Components;
+using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Header
 {
@@ -23,7 +23,7 @@ namespace Document.Desktop.Structures.Header
             }
         }
 
-        private TitlePage() { }
+        public TitlePage() { }
 
         public TitlePage(string headerLabel, string title)
         {

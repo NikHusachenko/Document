@@ -1,6 +1,6 @@
 ﻿using Document.Desktop.Contracts;
 
-namespace Document.Desktop.Structures
+namespace Document.Desktop.Structures.Components.Common
 {
     public sealed class TextContent : ICloneable<TextContent>, IValidable, IDisplayable
     {

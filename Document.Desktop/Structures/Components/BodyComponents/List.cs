@@ -1,4 +1,6 @@
-﻿namespace Document.Desktop.Structures.Components.BodyComponents
+﻿using Document.Desktop.Structures.Components.Common;
+
+namespace Document.Desktop.Structures.Components.BodyComponents
 {
     public class List : Component
     {
@@ -29,7 +31,7 @@
             set { _list[index].Content = value; }
         }
 
-        private List() { }
+        public List() { }
 
         public List(ListType listType)
         {

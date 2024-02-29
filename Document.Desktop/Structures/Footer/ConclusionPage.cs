@@ -1,4 +1,5 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Footer
 {

@@ -6,9 +6,28 @@ namespace Document.Desktop.Structures.Body
     {
         private Page[] _pages;
 
-        public bool IsValid => throw new NotImplementedException();
+        public bool IsValid
+        {
+            get
+            {
+                for (int i = 0; i < _pages.Length; i++)
+                {
+                    if (!_pages[i].IsValid)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
         public int Length => _pages.Length;
         public Page this[int index] => _pages[index];
+
+        public BodyStructure()
+        {
+            _pages = new Page[0];
+        }
 
         private BodyStructure(Page[] pages)
         {

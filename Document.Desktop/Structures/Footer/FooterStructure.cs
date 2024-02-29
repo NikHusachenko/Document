@@ -7,20 +7,40 @@ namespace Document.Desktop.Structures.Footer
         public ConclusionPage ConclusionPage { get; private set; }
         public SourcePage SourcePage { get; private set; }
 
-        public bool IsValid => throw new NotImplementedException();
+        public bool IsValid
+        {
+            get
+            {
+                if (!ConclusionPage.IsValid)
+                {
+                    return false;
+                }
 
-        private FooterStructure() { }
+                if (!SourcePage.IsValid)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public FooterStructure()
+        {
+            ConclusionPage = BuildDefaultConclusionPage();
+            SourcePage = BuildDefaultSourcePage();
+        }
 
         public static FooterStructure BuildDefault()
         {
             return new FooterStructure()
             {
-                ConclusionPage = BuildDefaultConclusion(),
+                ConclusionPage = BuildDefaultConclusionPage(),
                 SourcePage = BuildDefaultSourcePage(),
             };
         }
 
-        private static ConclusionPage BuildDefaultConclusion() => new ConclusionPage();
+        private static ConclusionPage BuildDefaultConclusionPage() => new ConclusionPage();
 
         private static SourcePage BuildDefaultSourcePage() => new SourcePage();
 

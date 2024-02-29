@@ -13,7 +13,7 @@ namespace Document.Desktop.Structures.Header
         public TitlePage TitlePage { get; set; }
         public ContentTable ContentTable { get; set; }
 
-        private HeaderStructure() { }
+        public HeaderStructure() { }
 
         public bool IsValid => CoverPage.IsValid && TitlePage.IsValid && ContentTable.IsValid;
 

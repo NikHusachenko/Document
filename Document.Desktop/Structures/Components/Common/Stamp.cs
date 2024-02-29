@@ -1,6 +1,6 @@
 ﻿using Document.Desktop.Contracts;
 
-namespace Document.Desktop.Structures.Components
+namespace Document.Desktop.Structures.Components.Common
 {
     public sealed class Stamp : ICloneable<Stamp>, IValidable
     {
@@ -28,8 +28,8 @@ namespace Document.Desktop.Structures.Components
 
         public Stamp Clone() => new()
         {
-            Height = Height, 
-            Width = Width, 
+            Height = Height,
+            Width = Width,
             PathToImage = PathToImage
         };
     }

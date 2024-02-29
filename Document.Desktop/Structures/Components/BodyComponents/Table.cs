@@ -1,4 +1,6 @@
-﻿namespace Document.Desktop.Structures.Components.BodyComponents
+﻿using Document.Desktop.Structures.Components.Common;
+
+namespace Document.Desktop.Structures.Components.BodyComponents
 {
     public class Table : Component
     {
@@ -28,7 +30,7 @@
             set { _table[row][column] = value; }
         }
 
-        private Table() { }
+        public Table() { }
         
         public Table(int rows, int columns)
         {

@@ -1,4 +1,5 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Header
 {
@@ -8,7 +9,7 @@ namespace Document.Desktop.Structures.Header
         public TextContent Subtitle { get; set; }
         public TextContent Author { get; set; }
 
-        private CoverPage() { }
+        public CoverPage() { }
 
         public CoverPage(string title, string author)
         {
