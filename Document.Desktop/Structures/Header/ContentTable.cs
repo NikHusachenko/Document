@@ -1,9 +1,11 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 
 namespace Document.Desktop.Structures.Header
 {
     public sealed class ContentTable : ICloneable<ContentTable>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
         private ContentTableItem[] _table;
 
         public bool IsValid
@@ -27,15 +29,13 @@ namespace Document.Desktop.Structures.Header
 
         public int Length => _table.Length;
 
-        private ContentTable(ContentTableItem[] table)
+        private ContentTable(DocumentSystemContext systemContext, ContentTableItem[] table)
         {
+            _systemContext = systemContext;
             _table = table;
         }
 
-        public ContentTable()
-        {
-            _table = new ContentTableItem[0];
-        }
+        public ContentTable(DocumentSystemContext systemContext) : this(systemContext, []) { }
 
         /// <summary>
         /// Append empty Invalid item to end of content table
@@ -44,7 +44,7 @@ namespace Document.Desktop.Structures.Header
         public int Append(string label)
         {
             Array.Resize(ref _table, _table.Length + 1);
-            _table[_table.Length - 1] = new ContentTableItem(label, _table.Length - 1);
+            _table[_table.Length - 1] = new ContentTableItem(_systemContext, label, _table.Length - 1);
             return _table.Length;
         }
 
@@ -58,15 +58,15 @@ namespace Document.Desktop.Structures.Header
             return _table.Length;
         }
 
-        public ContentTable Clone()
+        public ContentTable Clone(DocumentSystemContext systemContext)
         {
             ContentTableItem[] cloneTable = new ContentTableItem[_table.Length];
             foreach (ContentTableItem item in _table)
             {
-                cloneTable[item.Index] = item.Clone();
+                cloneTable[item.Index] = item.Clone(systemContext);
             }
 
-            return new ContentTable(cloneTable);
+            return new ContentTable(systemContext, cloneTable);
         }
 
         public void Display()
@@ -77,6 +77,8 @@ namespace Document.Desktop.Structures.Header
 
     public sealed class ContentTableItem : ICloneable<ContentTableItem>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         public string Content { get; set; } = string.Empty;
         public int Index { get; }
 
@@ -98,8 +100,9 @@ namespace Document.Desktop.Structures.Header
             }
         }
 
-        public ContentTableItem(string content, int index)
+        public ContentTableItem(DocumentSystemContext systemContext, string content, int index)
         {
+            _systemContext = systemContext;
             Content = content;
             Index = index;
         }
@@ -109,6 +112,6 @@ namespace Document.Desktop.Structures.Header
             throw new NotImplementedException();
         }
 
-        public ContentTableItem Clone() => new ContentTableItem(Content, Index);
+        public ContentTableItem Clone(DocumentSystemContext systemContext) => new ContentTableItem(systemContext, Content, Index);
     }
 }

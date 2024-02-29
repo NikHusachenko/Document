@@ -1,10 +1,13 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Footer
 {
     public sealed class SourcePage : ICloneable<SourcePage>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         private SourceItem[] _sources;
 
         public bool IsValid
@@ -30,14 +33,12 @@ namespace Document.Desktop.Structures.Footer
             set { _sources[index] = value; }
         }
 
-        private SourcePage(SourceItem[] sources)
-        {
-            _sources = sources;
-        }
+        public SourcePage(DocumentSystemContext systemContext) : this(systemContext, []) { }
 
-        public SourcePage()
+        private SourcePage(DocumentSystemContext systemContext, SourceItem[] sources)
         {
-            _sources = new SourceItem[0];
+            _systemContext = systemContext;
+            _sources = sources;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Document.Desktop.Structures.Footer
         public SourceItem Append(string content, string url)
         {
             Array.Resize(ref _sources, _sources.Length + 1);
-            _sources[_sources.Length - 1] = new SourceItem(content, url);
+            _sources[_sources.Length - 1] = new SourceItem(_systemContext, content, url);
             return _sources[_sources.Length - 1];
         }
 
@@ -68,31 +69,32 @@ namespace Document.Desktop.Structures.Footer
             throw new NotImplementedException();
         }
 
-        public SourcePage Clone()
+        public SourcePage Clone(DocumentSystemContext systemContext)
         {
             SourceItem[] sources = new SourceItem[_sources.Length];
             for (int i = 0; i < sources.Length; i++)
             {
-                sources[i] = _sources[i].Clone();
+                sources[i] = _sources[i].Clone(systemContext);
             }
 
-            return new SourcePage(sources);
+            return new SourcePage(systemContext, sources);
         }
     }
 
     public sealed class SourceItem : ICloneable<SourceItem>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         public TextContent Content { get; set; }
         public string SourceUrl { get; set; } = string.Empty;
 
-        public SourceItem()
-        {
-            Content = new TextContent(string.Empty);
-        }
+        public SourceItem(DocumentSystemContext systemContext) 
+            : this(systemContext, string.Empty, string.Empty) { }
 
-        public SourceItem(string content, string url)
+        public SourceItem(DocumentSystemContext systemContext, string content, string url)
         {
-            Content = new TextContent(content);
+            _systemContext = systemContext;
+            Content = new TextContent(_systemContext, content);
             SourceUrl = url;
         }
 
@@ -109,9 +111,9 @@ namespace Document.Desktop.Structures.Footer
             }
         }
 
-        public SourceItem Clone() => new SourceItem()
+        public SourceItem Clone(DocumentSystemContext systemContext) => new SourceItem(systemContext)
         {
-            Content = Content.Clone(),
+            Content = Content.Clone(systemContext),
             SourceUrl = SourceUrl,
         };
 

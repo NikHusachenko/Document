@@ -1,9 +1,12 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 
 namespace Document.Desktop.Structures.Body
 {
     public sealed class BodyStructure : ICloneable<BodyStructure>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         private Page[] _pages;
 
         public bool IsValid
@@ -24,17 +27,15 @@ namespace Document.Desktop.Structures.Body
         public int Length => _pages.Length;
         public Page this[int index] => _pages[index];
 
-        public BodyStructure()
+        private BodyStructure(DocumentSystemContext systemContext, Page[] pages)
         {
-            _pages = new Page[0];
-        }
-
-        private BodyStructure(Page[] pages)
-        {
+            _systemContext = systemContext;
             _pages = pages;
         }
 
-        public static BodyStructure BuildDefault() => new BodyStructure(new Page[0]);
+        public BodyStructure(DocumentSystemContext systemContext) : this(systemContext, []) { }
+
+        public static BodyStructure BuildDefault(DocumentSystemContext systemContext) => new BodyStructure(systemContext);
         
         /// <summary>
         /// Append a new Page to pages array
@@ -43,7 +44,7 @@ namespace Document.Desktop.Structures.Body
         public Page AppendPageToEnd()
         {
             Array.Resize(ref _pages, _pages.Length + 1);
-            _pages[_pages.Length - 1] = new Page();
+            _pages[_pages.Length - 1] = new Page(_systemContext);
             return _pages[_pages.Length - 1];
         }
 
@@ -57,15 +58,15 @@ namespace Document.Desktop.Structures.Body
             return _pages.Length;
         }
 
-        public BodyStructure Clone()
+        public BodyStructure Clone(DocumentSystemContext systemContext)
         {
             Page[] pages = new Page[_pages.Length];
             for (int i = 0; i < _pages.Length; i++)
             {
-                pages[i] = _pages[i].Clone();
+                pages[i] = _pages[i].Clone(systemContext);
             }
 
-            return new BodyStructure(pages);
+            return new BodyStructure(systemContext, pages);
         }
 
         public void Display()

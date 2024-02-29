@@ -1,4 +1,5 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Footer
@@ -6,16 +7,20 @@ namespace Document.Desktop.Structures.Footer
     public sealed class ConclusionPage : ICloneable<ConclusionPage>, IValidable, IDisplayable
     {
         private const string DEFAULT_CONCLUSION_UNIT_NAME = "Conclusion";
-        
+
+        private readonly DocumentSystemContext _systemContext;
+
         public string ConclusionUnitName { get; set; }
         public TextContent Content { get; set; }
 
-        public ConclusionPage() : this(DEFAULT_CONCLUSION_UNIT_NAME) { }
+        private ConclusionPage(DocumentSystemContext systemContext) 
+            : this(systemContext, DEFAULT_CONCLUSION_UNIT_NAME) { }
 
-        public ConclusionPage(string unitName)
+        public ConclusionPage(DocumentSystemContext systemContext, string unitName)
         {
+            _systemContext = systemContext;
             ConclusionUnitName = unitName;
-            Content = new TextContent(string.Empty);
+            Content = new TextContent(_systemContext, string.Empty);
         }
 
         public bool IsValid
@@ -31,10 +36,10 @@ namespace Document.Desktop.Structures.Footer
             }
         }
 
-        public ConclusionPage Clone() => new ConclusionPage()
+        public ConclusionPage Clone(DocumentSystemContext systemContext) => new ConclusionPage(systemContext)
         {
             ConclusionUnitName = ConclusionUnitName,
-            Content = Content.Clone(),
+            Content = Content.Clone(systemContext),
         };
 
         public void Display()

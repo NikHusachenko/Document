@@ -1,7 +1,9 @@
-﻿namespace Document.Desktop.Contracts
+﻿using Document.Desktop.Management;
+
+namespace Document.Desktop.Contracts
 {
     public interface ICloneable<T>
     {
-        T Clone();
+        T Clone(DocumentSystemContext systemContext);
     }
 }

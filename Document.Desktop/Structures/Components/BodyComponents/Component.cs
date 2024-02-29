@@ -1,4 +1,5 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 
 namespace Document.Desktop.Structures.Components.BodyComponents
 {
@@ -10,7 +11,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
 
         public abstract bool IsValid { get; }
         
-        public abstract Component Clone();
+        public abstract Component Clone(DocumentSystemContext systemContext);
         public abstract void Display();
     }
 

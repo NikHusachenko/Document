@@ -1,21 +1,27 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Header
 {
     public sealed class CoverPage : ICloneable<CoverPage>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         public TextContent Title { get; set; }
         public TextContent Subtitle { get; set; }
         public TextContent Author { get; set; }
 
-        public CoverPage() { }
+        private CoverPage(DocumentSystemContext systemContext) 
+            : this(systemContext, string.Empty, string.Empty) { }
 
-        public CoverPage(string title, string author)
+        public CoverPage(DocumentSystemContext systemContext, string title, string author)
         {
-            Title = new TextContent(title);
-            Subtitle = new TextContent(string.Empty);
-            Author = new TextContent(author);
+            _systemContext = systemContext;
+
+            Title = new TextContent(_systemContext, title);
+            Subtitle = new TextContent(_systemContext, string.Empty);
+            Author = new TextContent(_systemContext, author);
         }
 
         public bool IsValid
@@ -36,11 +42,11 @@ namespace Document.Desktop.Structures.Header
             }
         }
 
-        public CoverPage Clone() => new CoverPage() 
+        public CoverPage Clone(DocumentSystemContext systemContext) => new CoverPage(systemContext) 
         { 
-            Title = Title.Clone(), 
-            Subtitle = Subtitle.Clone(),
-            Author = Author.Clone()
+            Title = Title.Clone(systemContext),
+            Subtitle = Subtitle.Clone(systemContext),
+            Author = Author.Clone(systemContext)
         };
 
         public void Display()

@@ -1,10 +1,13 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Header
 {
     public sealed class TitlePage : ICloneable<TitlePage>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         public TextContent HeaderLabel { get; set; }
         public TextContent Title { get; set; }
         public Stamp? Stamp { get; set; }
@@ -23,19 +26,22 @@ namespace Document.Desktop.Structures.Header
             }
         }
 
-        public TitlePage() { }
+        private TitlePage(DocumentSystemContext systemContext)
+            : this(systemContext, string.Empty, string.Empty) { }
 
-        public TitlePage(string headerLabel, string title)
+        public TitlePage(DocumentSystemContext systemContext, string headerLabel, string title)
         {
-            HeaderLabel = new TextContent(headerLabel);
-            Title = new TextContent(title);
+            _systemContext = systemContext;
+
+            HeaderLabel = new TextContent(_systemContext, headerLabel);
+            Title = new TextContent(_systemContext, title);
         }
 
-        public TitlePage Clone() => new TitlePage()
+        public TitlePage Clone(DocumentSystemContext systemContext) => new TitlePage(systemContext)
         {
-            HeaderLabel = HeaderLabel.Clone(),
-            Title = Title.Clone(),
-            Stamp = Stamp?.Clone()
+            HeaderLabel = HeaderLabel.Clone(systemContext),
+            Title = Title.Clone(systemContext),
+            Stamp = Stamp?.Clone(systemContext)
         };
 
         public void Display()

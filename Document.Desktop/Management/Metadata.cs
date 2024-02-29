@@ -7,6 +7,8 @@ namespace Document.Desktop.Management
         private const string DEFAULT_EXTENSION = "prodoc";
         private const string DEFAULT_DOCUMENT_NAME = "Document";
 
+        private readonly DocumentSystemContext _systemContext;
+
         private string DefaultAuthorName => Environment.MachineName;
 
         public DateTimeOffset CreatedAt { get; set; }
@@ -17,12 +19,16 @@ namespace Document.Desktop.Management
         public string DocumentName { get; set; }
         public string Extension { get; set; } = DEFAULT_EXTENSION;
 
-        public Metadata() : this(string.Empty, DEFAULT_DOCUMENT_NAME) { Author = DefaultAuthorName; }
+        public Metadata(DocumentSystemContext systemContext) 
+            : this(systemContext, string.Empty, DEFAULT_DOCUMENT_NAME) { Author = DefaultAuthorName; }
 
-        public Metadata(string author) : this(author, DEFAULT_DOCUMENT_NAME) { }
+        public Metadata(DocumentSystemContext systemContext, string author) 
+            : this(systemContext, author, DEFAULT_DOCUMENT_NAME) { }
 
-        public Metadata(string author, string documentName)
+        public Metadata(DocumentSystemContext systemContext, string author, string documentName)
         {
+            _systemContext = systemContext;
+            
             CreatedAt = DateTimeOffset.Now;
             LastModifiedAt = DateTimeOffset.Now;
             Author = author;
@@ -31,7 +37,7 @@ namespace Document.Desktop.Management
             DocumentName = documentName;
         }
 
-        public Metadata Clone() => new Metadata()
+        public Metadata Clone(DocumentSystemContext systemContext) => new Metadata(systemContext)
         {
             Author = Author,
             CreatedAt = DateTimeOffset.Now,

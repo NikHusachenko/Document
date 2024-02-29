@@ -1,9 +1,12 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 
 namespace Document.Desktop.Structures.Header
 {
     public sealed class HeaderStructure : ICloneable<HeaderStructure>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         private const string DEFAULT_COVER_TITLE = "Default title here";
         private const string DEFAULT_AUTHOR_NAME = "Default author name here";
         private const string DEFAULT_HEADER_LABEL = "Default header label";
@@ -13,29 +16,39 @@ namespace Document.Desktop.Structures.Header
         public TitlePage TitlePage { get; set; }
         public ContentTable ContentTable { get; set; }
 
-        public HeaderStructure() { }
+        public HeaderStructure(DocumentSystemContext systemContext)
+        {
+            _systemContext = systemContext;
+
+            CoverPage = BuildDefaultCoverPage(systemContext);
+            TitlePage = BuildDefaultTitlePage(systemContext);
+            ContentTable = BuildDefaultContentTable(systemContext);
+        }
 
         public bool IsValid => CoverPage.IsValid && TitlePage.IsValid && ContentTable.IsValid;
 
-        public HeaderStructure Clone() => new HeaderStructure()
+        public HeaderStructure Clone(DocumentSystemContext systemContext) => new HeaderStructure(systemContext)
         {
-            CoverPage = CoverPage.Clone(),
-            TitlePage = TitlePage.Clone(),
-            ContentTable = ContentTable.Clone(),
+            CoverPage = CoverPage.Clone(systemContext),
+            TitlePage = TitlePage.Clone(systemContext),
+            ContentTable = ContentTable.Clone(systemContext),
         };
 
-        public static HeaderStructure BuildDefault() => new HeaderStructure()
+        public static HeaderStructure BuildDefault(DocumentSystemContext systemContext) => new HeaderStructure(systemContext)
         {
-            CoverPage = BuildDefaultCoverPage(),
-            TitlePage = BuildDefaultTitlePage(),
-            ContentTable = BuildDefaultContentTable(),
+            CoverPage = BuildDefaultCoverPage(systemContext),
+            TitlePage = BuildDefaultTitlePage(systemContext),
+            ContentTable = BuildDefaultContentTable(systemContext),
         };
 
-        private static CoverPage BuildDefaultCoverPage() => new CoverPage(DEFAULT_AUTHOR_NAME, DEFAULT_COVER_TITLE);
+        private static CoverPage BuildDefaultCoverPage(DocumentSystemContext systemContext) 
+            => new CoverPage(systemContext, DEFAULT_AUTHOR_NAME, DEFAULT_COVER_TITLE);
 
-        private static TitlePage BuildDefaultTitlePage() => new TitlePage(DEFAULT_HEADER_LABEL, DEFAULT_TITLE_LABEL);
+        private static TitlePage BuildDefaultTitlePage(DocumentSystemContext systemContext) 
+            => new TitlePage(systemContext, DEFAULT_HEADER_LABEL, DEFAULT_TITLE_LABEL);
 
-        private static ContentTable BuildDefaultContentTable() => new ContentTable();
+        private static ContentTable BuildDefaultContentTable(DocumentSystemContext systemContext) 
+            => new ContentTable(systemContext);
 
         public void Display()
         {

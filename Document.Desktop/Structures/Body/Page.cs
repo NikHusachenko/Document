@@ -1,17 +1,37 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 using Document.Desktop.Structures.Components.BodyComponents;
 
 namespace Document.Desktop.Structures.Body
 {
     public sealed class Page : ICloneable<Page>, IValidable, IDisplayable
     {
+        private readonly DocumentSystemContext _systemContext;
+
         private Component[] _components;
-        
-        private Page(Component[] components) => _components = components;
 
-        public Page() => _components = new Component[0];
+        public Page(DocumentSystemContext systemContext) : this(systemContext, []) { }
 
-        public bool IsValid => throw new NotImplementedException();
+        private Page(DocumentSystemContext systemContext, Component[] components)
+        {
+            _systemContext = systemContext;
+            _components = components;
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                for (int i = 0; i < _components.Length; i++)
+                {
+                    if (!_components[i].IsValid)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
 
         public Component this[int index]
         {
@@ -41,15 +61,15 @@ namespace Document.Desktop.Structures.Body
             return _components.Length;
         }
 
-        public Page Clone()
+        public Page Clone(DocumentSystemContext systemContext)
         {
             Component[] components = new Component[_components.Length];
             for (int i = 0; i < components.Length; i++)
             {
-                components[i] = _components[i].Clone();
+                components[i] = _components[i].Clone(systemContext);
             }
 
-            return new Page(components);
+            return new Page(systemContext, components);
         }
 
         public void Display()

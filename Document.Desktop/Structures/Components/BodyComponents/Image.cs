@@ -1,17 +1,25 @@
-﻿using Document.Desktop.Structures.Components.Common;
+﻿using Document.Desktop.Management;
+using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Components.BodyComponents
 {
     public sealed class Image : Component
     {
-        public string PathToImage { get; }
+        private const string DEFAULT_IMAGE_LABEL = "Image";
+
+        private readonly DocumentSystemContext _systemContext;
+
+        public string PathToImage { get; } = string.Empty;
         public TextContent Label { get; set; }
 
-        public Image() { }
+        public Image(DocumentSystemContext systemContext, string path) : this(systemContext, path, DEFAULT_IMAGE_LABEL) { }
 
-        public Image(string path)
+        public Image(DocumentSystemContext systemContext, string pathToImage, string label)
         {
-            PathToImage = path;
+            _systemContext = systemContext;
+
+            PathToImage = pathToImage;
+            Label = new TextContent(systemContext, label);
         }
 
         public override bool IsValid
@@ -27,10 +35,10 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             }
         }
 
-        public override Image Clone() => new Image(PathToImage)
+        public override Image Clone(DocumentSystemContext systemContext) => new Image(systemContext, PathToImage)
         {
             InnerFontHeight = InnerFontHeight,
-            Label = Label.Clone(),
+            Label = Label.Clone(systemContext),
             MarginLeft = MarginLeft,
             MarginRight = MarginRight
         };

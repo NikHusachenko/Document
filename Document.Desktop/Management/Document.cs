@@ -8,12 +8,14 @@ using Document.Desktop.Structures.Header;
 
 namespace Document.Desktop.Management
 {
-    public class Document : ICloneable<Document>, IValidable, IDisplayable
+    public class Document : IValidable, IDisplayable
     {
-        public Metadata Metadata { get; set; }
-        public HeaderStructure Header { get; set; }
-        public BodyStructure Body { get; set; }
-        public FooterStructure Footer { get; set; }
+        private readonly DocumentSystemContext _context;
+
+        public Metadata Metadata { get; private init; }
+        public HeaderStructure Header { get; private init; }
+        public BodyStructure Body { get; private init; }
+        public FooterStructure Footer { get; private init; }
 
         public bool IsValid
         {
@@ -25,15 +27,19 @@ namespace Document.Desktop.Management
             }
         }
 
-        public Document() { }
+        private Document()
+        {
+            _context = new DocumentSystemContext(this);
+        }
 
         public Document(string title)
         {
-            Metadata = new Metadata("Faraday");
+            _context = new DocumentSystemContext(this);
+            Metadata = new Metadata(_context);
 
-            Header = HeaderStructure.BuildDefault();
-            Body = BodyStructure.BuildDefault();
-            Footer = FooterStructure.BuildDefault();
+            Header = HeaderStructure.BuildDefault(_context);
+            Body = BodyStructure.BuildDefault(_context);
+            Footer = FooterStructure.BuildDefault(_context);
         }
 
         public void Display()
@@ -43,10 +49,10 @@ namespace Document.Desktop.Management
 
         public Document Clone() => new Document()
         {
-            Body = Body.Clone(),
-            Footer = Footer.Clone(),
-            Header = Header.Clone(),
-            Metadata = Metadata.Clone(),
+            Body = Body.Clone(_context),
+            Footer = Footer.Clone(_context),
+            Header = Header.Clone(_context),
+            Metadata = Metadata.Clone(_context),
         };
     }
 

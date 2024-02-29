@@ -1,9 +1,12 @@
-﻿using Document.Desktop.Structures.Components.Common;
+﻿using Document.Desktop.Management;
+using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Components.BodyComponents
 {
     public class List : Component
     {
+        private readonly DocumentSystemContext _systemContext;
+
         private TextContent[] _list;
 
         public ListType Type { get; private set; }
@@ -31,11 +34,10 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             set { _list[index].Content = value; }
         }
 
-        public List() { }
-
-        public List(ListType listType)
+        public List(DocumentSystemContext systemContext, ListType listType)
         {
-            _list = new TextContent[0];
+            _systemContext = systemContext;
+            _list = [];
 
             Type = listType;
         }
@@ -49,7 +51,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
         public TextContent AppendItem(string content)
         {
             Array.Resize(ref _list, _list.Length + 1);
-            _list[_list.Length - 1] = new TextContent(content);
+            _list[_list.Length - 1] = new TextContent(_systemContext, content);
             return _list[_list.Length - 1];
         }
 
@@ -73,18 +75,17 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             throw new NotImplementedException();
         }
 
-        public override List Clone()
+        public override List Clone(DocumentSystemContext systemContext)
         {
             TextContent[] list = new TextContent[_list.Length];
             for (int i = 0; i < list.Length; i++)
             {
-                list[i] = _list[i].Clone();
+                list[i] = _list[i].Clone(systemContext);
             }
 
-            return new List()
+            return new List(systemContext, Type)
             {
                 InnerFontHeight = InnerFontHeight,
-                Type = Type,
                 MarginLeft = MarginLeft,
                 MarginRight = MarginRight,
                 _list = list,

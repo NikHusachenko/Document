@@ -1,9 +1,12 @@
-﻿using Document.Desktop.Structures.Components.Common;
+﻿using Document.Desktop.Management;
+using Document.Desktop.Structures.Components.Common;
 
 namespace Document.Desktop.Structures.Components.BodyComponents
 {
     public class Table : Component
     {
+        private readonly DocumentSystemContext _systemContext;
+
         private TextContent[][] _table;
 
         public override bool IsValid
@@ -30,10 +33,16 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             set { _table[row][column] = value; }
         }
 
-        public Table() { }
-        
-        public Table(int rows, int columns)
+        private Table(DocumentSystemContext systemContext, TextContent[][] table)
         {
+            _systemContext = systemContext;
+            _table = table;
+        }
+
+        public Table(DocumentSystemContext systemContext, int rows, int columns)
+        {
+            _systemContext = systemContext;
+
             if (rows < 0 || columns < 0)
             {
                 throw new ArgumentOutOfRangeException("Parameters must be greater than or equal to one");
@@ -45,7 +54,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
                 _table[i] = new TextContent[columns];
             }
         }
-        
+
         /// <summary>
         /// Append row to table of content
         /// </summary>
@@ -89,7 +98,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             for (int i = 0; i < _table.Length; i++)
             {
                 Array.Resize(ref _table[i], _table[i].Length + 1);
-                _table[i][_table[i].Length - 1] = new TextContent("");
+                _table[i][_table[i].Length - 1] = new TextContent(_systemContext, string.Empty);
             }
             return _table.First().Length;
         }
@@ -112,7 +121,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
             return _table.First().Length;
         }
 
-        public override Table Clone()
+        public override Table Clone(DocumentSystemContext systemContext)
         {
             TextContent[][] table = new TextContent[_table.Length][];
             for (int i = 0; i < table.Length; i++)
@@ -120,16 +129,15 @@ namespace Document.Desktop.Structures.Components.BodyComponents
                 table[i] = new TextContent[_table[i].Length];
                 for (int j = 0; j < table[i].Length; j++)
                 {
-                    table[i][j] = _table[i][j].Clone();
+                    table[i][j] = _table[i][j].Clone(systemContext);
                 }
             }
 
-            return new Table()
+            return new Table(systemContext, table)
             {
                 InnerFontHeight = InnerFontHeight,
                 MarginLeft = MarginLeft,
                 MarginRight = MarginRight,
-                _table = _table
             };
         }
 

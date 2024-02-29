@@ -1,9 +1,14 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Management;
 
 namespace Document.Desktop.Structures.Footer
 {
     public sealed class FooterStructure : ICloneable<FooterStructure>, IValidable, IDisplayable
     {
+        private const string DEFAULT_CONCLUSION_UNIT_NAME = "Conclusion";
+
+        private readonly DocumentSystemContext _systemContext;
+
         public ConclusionPage ConclusionPage { get; private set; }
         public SourcePage SourcePage { get; private set; }
 
@@ -25,29 +30,30 @@ namespace Document.Desktop.Structures.Footer
             }
         }
 
-        public FooterStructure()
+        public FooterStructure(DocumentSystemContext systemContext)
         {
-            ConclusionPage = BuildDefaultConclusionPage();
-            SourcePage = BuildDefaultSourcePage();
+            _systemContext = systemContext;
+
+            ConclusionPage = BuildDefaultConclusionPage(systemContext);
+            SourcePage = BuildDefaultSourcePage(systemContext);
         }
 
-        public static FooterStructure BuildDefault()
+        public static FooterStructure BuildDefault(DocumentSystemContext systemContext) => new FooterStructure(systemContext)
         {
-            return new FooterStructure()
-            {
-                ConclusionPage = BuildDefaultConclusionPage(),
-                SourcePage = BuildDefaultSourcePage(),
-            };
-        }
+            ConclusionPage = BuildDefaultConclusionPage(systemContext),
+            SourcePage = BuildDefaultSourcePage(systemContext),
+        };
 
-        private static ConclusionPage BuildDefaultConclusionPage() => new ConclusionPage();
+        private static ConclusionPage BuildDefaultConclusionPage(DocumentSystemContext systemContext) 
+            => new ConclusionPage(systemContext, DEFAULT_CONCLUSION_UNIT_NAME);
 
-        private static SourcePage BuildDefaultSourcePage() => new SourcePage();
+        private static SourcePage BuildDefaultSourcePage(DocumentSystemContext systemContext) 
+            => new SourcePage(systemContext);
 
-        public FooterStructure Clone() => new FooterStructure()
+        public FooterStructure Clone(DocumentSystemContext systemContext) => new FooterStructure(systemContext)
         {
-            ConclusionPage = ConclusionPage.Clone(),
-            SourcePage = SourcePage.Clone(),
+            ConclusionPage = ConclusionPage.Clone(systemContext),
+            SourcePage = SourcePage.Clone(systemContext),
         };
 
         public void Display()
