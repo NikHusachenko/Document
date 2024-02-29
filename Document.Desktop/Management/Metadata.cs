@@ -1,34 +1,34 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Contracts.Observers;
 
 namespace Document.Desktop.Management
 {
-    public sealed class Metadata : ICloneable<Metadata>
+    public sealed class Metadata : ICloneable<Metadata>, IChangeSubscribable
     {
         private const string DEFAULT_EXTENSION = "prodoc";
         private const string DEFAULT_DOCUMENT_NAME = "Document";
 
-        private readonly DocumentSystemContext _systemContext;
-
         private string DefaultAuthorName => Environment.MachineName;
         
         public Guid UniqueMetaUuid { get; private init; }
+        public DocumentSystemContext SystemContext { get; private set; }
+
         public DateTimeOffset CreatedAt { get; private init; }
-        public DateTimeOffset LastModifiedAt { get; private init; }
+        public DateTimeOffset LastModifiedAt { get; private set; }
         public string Author { get; private init; }
         
-        public string SavedAt { get; private init; }
-        public string DocumentName { get; private init; }
-        public string Extension { get; private init; } = DEFAULT_EXTENSION;
+        public string SavedAt { get; private set; }
+        public string DocumentName { get; private set; }
+        public string Extension { get; private set; } = DEFAULT_EXTENSION;
 
-        public Metadata(DocumentSystemContext systemContext) 
-            : this(systemContext, string.Empty, DEFAULT_DOCUMENT_NAME) { Author = DefaultAuthorName; }
+        public Metadata() : this(string.Empty, DEFAULT_DOCUMENT_NAME) { Author = DefaultAuthorName; }
 
-        public Metadata(DocumentSystemContext systemContext, string author) 
-            : this(systemContext, author, DEFAULT_DOCUMENT_NAME) { }
+        public Metadata(string author) : this(author, DEFAULT_DOCUMENT_NAME) { }
 
-        public Metadata(DocumentSystemContext systemContext, string author, string documentName)
+        public Metadata(string author, string documentName)
         {
-            _systemContext = systemContext;
+            SystemContext = new DocumentSystemContext();
+            SystemContext.Subscribe(this);
             
             UniqueMetaUuid = Guid.NewGuid();
             CreatedAt = DateTimeOffset.Now;
@@ -39,14 +39,17 @@ namespace Document.Desktop.Management
             DocumentName = documentName;
         }
 
-        public Metadata Clone(DocumentSystemContext systemContext) => new Metadata(systemContext)
+        public Metadata Clone(DocumentSystemContext systemContext) => new Metadata()
         {
             Author = Author,
             CreatedAt = DateTimeOffset.Now,
             DocumentName = DocumentName,
             Extension = Extension,
             LastModifiedAt = DateTimeOffset.Now,
-            SavedAt = SavedAt
+            SavedAt = SavedAt,
+            SystemContext = systemContext
         };
+
+        public void ChangeNotify() => LastModifiedAt = DateTimeOffset.Now;
     }
 }

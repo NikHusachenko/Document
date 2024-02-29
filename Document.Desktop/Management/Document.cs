@@ -1,4 +1,5 @@
 ﻿using Document.Desktop.Contracts;
+using Document.Desktop.Contracts.Observers;
 using Document.Desktop.Management.FileManagement.Export;
 using Document.Desktop.Management.FileManagement.Import;
 using Document.Desktop.Response;
@@ -8,11 +9,9 @@ using Document.Desktop.Structures.Header;
 
 namespace Document.Desktop.Management
 {
-    public class Document : IValidable, IDisplayable
+    public class Document : ICloneable<Document>, IValidable, IDisplayable
     {
         private const string DEFAULT_DOCUMENT_TITLE = "Document";
-
-        private readonly DocumentSystemContext _context;
 
         public Metadata Metadata { get; private init; }
         public HeaderStructure Header { get; private init; }
@@ -33,12 +32,11 @@ namespace Document.Desktop.Management
 
         public Document(string title)
         {
-            _context = new DocumentSystemContext(this);
-            Metadata = new Metadata(_context);
+            Metadata = new Metadata();
 
-            Header = HeaderStructure.BuildDefault(_context);
-            Body = BodyStructure.BuildDefault(_context);
-            Footer = FooterStructure.BuildDefault(_context);
+            Header = HeaderStructure.BuildDefault(Metadata.SystemContext);
+            Body = BodyStructure.BuildDefault(Metadata.SystemContext);
+            Footer = FooterStructure.BuildDefault(Metadata.SystemContext);
         }
 
         public void Display()
@@ -55,7 +53,8 @@ namespace Document.Desktop.Management
             Console.WriteLine(new string('=', Console.WindowWidth));
             Console.WriteLine(Metadata.UniqueMetaUuid);
             Console.WriteLine(Metadata.Author);
-            Console.WriteLine(Metadata.CreatedAt.ToString("dd.MM.yyyy HH:mm"));
+            Console.WriteLine(Metadata.CreatedAt.ToString("dd.MM.yyyy HH:mm:ss"));
+            Console.WriteLine(Metadata.LastModifiedAt.ToString("dd.MM.yyyy HH:mm:ss"));
             Console.WriteLine(Metadata.SavedAt);
             Console.WriteLine(Metadata.DocumentName);
             Console.WriteLine(Metadata.Extension);
@@ -64,10 +63,18 @@ namespace Document.Desktop.Management
 
         public Document Clone() => new Document()
         {
-            Body = Body.Clone(_context),
-            Footer = Footer.Clone(_context),
-            Header = Header.Clone(_context),
-            Metadata = Metadata.Clone(_context),
+            Body = Body.Clone(Metadata.SystemContext),
+            Footer = Footer.Clone(Metadata.SystemContext),
+            Header = Header.Clone(Metadata.SystemContext),
+            Metadata = Metadata.Clone(Metadata.SystemContext),
+        };
+
+        public Document Clone(DocumentSystemContext systemContext) => new Document()
+        {
+            Body = Body.Clone(systemContext),
+            Footer = Footer.Clone(systemContext),
+            Header = Header.Clone(systemContext),
+            Metadata = Metadata.Clone(systemContext),
         };
     }
 

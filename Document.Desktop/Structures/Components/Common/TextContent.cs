@@ -8,7 +8,7 @@ namespace Document.Desktop.Structures.Components.Common
     {
         private readonly DocumentSystemContext _systemContext;
 
-        public string Content { get; set; } = string.Empty;
+        public string Content { get; private set; } = string.Empty;
         public bool IsBold { get; set; }
         public bool IsItalic { get; set; }
         public TextMargin Margin { get; set; }
@@ -28,6 +28,12 @@ namespace Document.Desktop.Structures.Components.Common
             Content = content;
             IsBold = isBold;
             IsItalic = isItalic;
+        }
+
+        public void Write(string content)
+        {
+            Content = content;
+            _systemContext.ChangeNotify();
         }
 
         public TextContent Clone(DocumentSystemContext systemContext) => new TextContent(systemContext)

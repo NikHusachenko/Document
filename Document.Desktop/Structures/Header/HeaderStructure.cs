@@ -42,7 +42,7 @@ namespace Document.Desktop.Structures.Header
         };
 
         private static CoverPage BuildDefaultCoverPage(DocumentSystemContext systemContext) 
-            => new CoverPage(systemContext, DEFAULT_AUTHOR_NAME, DEFAULT_COVER_TITLE);
+            => new CoverPage(systemContext, DEFAULT_COVER_TITLE, DEFAULT_AUTHOR_NAME);
 
         private static TitlePage BuildDefaultTitlePage(DocumentSystemContext systemContext) 
             => new TitlePage(systemContext, DEFAULT_HEADER_LABEL, DEFAULT_TITLE_LABEL);

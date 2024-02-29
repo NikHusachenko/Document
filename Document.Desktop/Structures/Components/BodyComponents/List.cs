@@ -31,7 +31,7 @@ namespace Document.Desktop.Structures.Components.BodyComponents
         public string this[int index]
         {
             get { return _list[index].Content; }
-            set { _list[index].Content = value; }
+            set { _list[index].Write(value); }
         }
 
         public List(DocumentSystemContext systemContext, ListType listType)

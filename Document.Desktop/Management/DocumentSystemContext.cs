@@ -5,26 +5,23 @@ namespace Document.Desktop.Management
     // Open for inheritance and extension
     public class DocumentSystemContext : IChangeTrackable
     {
-        private readonly Document _target;
+        private readonly List<IChangeSubscribable> _subscribers;
 
-        public DocumentSystemContext(Document target)
+        public DocumentSystemContext()
         {
-            _target = target;
+            _subscribers = new List<IChangeSubscribable>();
         }
 
         public void ChangeNotify()
         {
-            throw new NotImplementedException();
+            foreach (var subscriber in _subscribers)
+            {
+                subscriber.ChangeNotify();
+            }
         }
 
-        public void Subscribe(IChangeSubscribable subscriber)
-        {
-            throw new NotImplementedException();
-        }
+        public void Subscribe(IChangeSubscribable subscriber) => _subscribers.Add(subscriber);
 
-        public void Unsubscribe(IChangeSubscribable subscriber)
-        {
-            throw new NotImplementedException();
-        }
+        public void Unsubscribe(IChangeSubscribable subscriber) => _subscribers.Remove(subscriber);
     }
 }
