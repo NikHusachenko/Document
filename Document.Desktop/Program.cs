@@ -1,5 +1,5 @@
-﻿Document.Desktop.Management.Document document1 = new("My new document");
-Document.Desktop.Management.Document document2 = document1.Clone();
+﻿Document.Prodocument.Management.Document document1 = new("My new document");
+Document.Prodocument.Management.Document document2 = document1.Clone();
 
 document1.Display();
 document2.Display();
